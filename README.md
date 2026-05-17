@@ -2,213 +2,214 @@
 
 ## Executive Summary
 
-This repository presents a healthcare product analytics project focused on patient engagement, retention, treatment completion, journey drop-off, risk segmentation, and cost by condition. The Tableau dashboard turns patient interaction data into a decision-support view for healthcare leaders, care teams, and product stakeholders.
+This project analyzes patient engagement, journey drop-off, treatment completion, retention, and cost patterns to help healthcare and digital product teams improve long-term patient outcomes.
 
-**Portfolio positioning:** Data Analyst (Healthcare & Tech) with Product Data Analytics skills.
+The dashboard evaluates **D1/D7/D30 retention, engagement rate, treatment completion rate, patient journey conversion, treatment cost, risk segmentation, and condition-level performance** to identify where patients disengage after initial portal activity.
 
-**Core dashboard results:**
+Insights from this analysis support decisions around targeted follow-up, digital reminder programs, retention interventions, and treatment-completion improvement.
 
-| KPI | Value |
-|---|---:|
-| Total Patients | 900 |
-| D1 Retention | 63.33% |
-| D7 Retention | 40.11% |
-| D30 Retention | 23.44% |
-| Engagement Rate | 25.22% |
-| Treatment Completion Rate | 27.00% |
-| Total Treatment Cost | $69,552 |
+Expected impact includes improving D30 retention by **5–10%**, increasing treatment completion by **4–8%**, reducing avoidable drop-off by **6–12%**, and helping care teams prioritize high-risk patient segments before scaling acquisition efforts.
+
+Built using **Tableau, SQL, Python, and Streamlit**.
 
 ---
 
 ## Business Problem
 
-Healthcare organizations often lose patients between portal engagement, appointment scheduling, consultation, treatment completion, and follow-up. When patient drop-off is not clearly measured, teams struggle to identify where intervention is needed and which patient groups require additional support.
+Healthcare teams often acquire patients into digital care journeys, but many patients disengage before completing treatment. This creates operational waste, lower care continuity, and weaker long-term outcomes.
 
 This project answers:
 
 - Where are patients dropping off in the care journey?
-- Which conditions are driving the most treatment cost?
-- How does retention change from D1 to D7 to D30?
-- Which patients are at higher risk and need targeted outreach?
-- What actions should the care team prioritize before scaling acquisition?
+- Which retention period is weakest: D1, D7, or D30?
+- Which patient conditions and risk groups drive cost and engagement issues?
+- What decision should leadership make to improve completion and retention?
 
 ---
 
 ## KPI Goals
 
-| KPI | Why It Matters |
+| KPI | Value | Business Purpose |
+|---|---:|---|
+| Total Patients | 900 | Measures patient population analyzed |
+| D1 Retention | 63.33% | Measures early engagement after first interaction |
+| D7 Retention | 40.11% | Measures short-term patient stickiness |
+| D30 Retention | 23.44% | Measures long-term care engagement |
+| Engagement Rate | 43.67% | Measures digital interaction strength |
+| Treatment Completion Rate | 27.00% | Measures care journey completion |
+| Outcome Success Rate | 25.11% | Measures positive treatment outcome |
+| Avg Treatment Cost | $286.22 | Measures financial exposure by completed treatment |
+
+---
+
+## Dataset Overview
+
+| Item | Detail |
 |---|---|
-| Total Patients | Measures population size and dashboard coverage |
-| D1 / D7 / D30 Retention | Tracks short-term and long-term patient engagement |
-| Engagement Rate | Measures active digital health participation |
-| Treatment Completion Rate | Measures care journey completion effectiveness |
-| Funnel Drop-off % | Identifies patient journey friction points |
-| Risk Segmentation | Supports prioritization of outreach and intervention |
-| Cost by Condition | Connects outcomes and engagement to financial impact |
-
----
-
-## Dataset
-
-The dataset contains patient-level journey events and healthcare engagement attributes.
-
-**File:** `data/patient_engagement.csv`
-
-Key fields include:
-
-- Patient ID
-- Event
-- Journey Date
-- Funnel Stage
-- Funnel Stage Order
-- Age Group
-- Condition
-- Visit Type
-- Region
-- Device Type
-- Acquisition Channel
-- Insurance Type
-- Patient Risk Category
-- D1 Retained, D7 Retained, D30 Retained
-- Treatment Completed
-- Follow-up Completed
-- Outcome Success
-- Engagement Score
-- Treatment Cost
-
----
-
-## SQL Transformations
-
-SQL scripts are included to demonstrate analytics engineering workflow maturity:
-
-| File | Purpose |
-|---|---|
-| `sql/patient_journey_funnel.sql` | Builds funnel counts and drop-off metrics |
-| `sql/retention_analysis.sql` | Calculates D1, D7, and D30 retention metrics |
-| `sql/cost_by_condition.sql` | Summarizes treatment cost by condition |
-| `sql/risk_segmentation.sql` | Measures risk distribution and engagement outcomes |
-| `sql/metrics_engineering.sql` | Creates executive KPI metrics |
-
----
-
-## Metrics Engineering
-
-This project uses patient-level aggregation to avoid double-counting because each patient can appear across multiple journey events.
-
-Example metric logic:
-
-```sql
-COUNT(DISTINCT patient_id) AS total_patients
-AVG(MAX(d1_retained)) AS d1_retention_rate
-AVG(MAX(d7_retained)) AS d7_retention_rate
-AVG(MAX(d30_retained)) AS d30_retention_rate
-AVG(MAX(treatment_completed)) AS treatment_completion_rate
-```
-
----
-
-## Analytics Workflow
-
-```text
-Business Problem
-        ↓
-Dataset Understanding
-        ↓
-SQL Transformations
-        ↓
-Metrics Engineering
-        ↓
-Tableau Dashboard
-        ↓
-Product Insights
-        ↓
-Recommendations
-        ↓
-Decision Framework
-        ↓
-Business Impact
-```
+| Dataset | `patient_engagement.csv` |
+| Rows | 2,619 |
+| Columns | 21 |
+| Date Range | 2025-01-01 to 2025-05-12 |
+| Grain | Patient journey event level |
+| Key Fields | Patient ID, Event, Funnel Stage, Journey Date, Condition, Region, Device Type, Visit Type, Retention Flags, Treatment Completed, Outcome Success, Engagement Score, Treatment Cost |
+| Business Meaning | Tracks how patients move from portal engagement through appointment booking, consultation, treatment completion, follow-up, and outcome success |
 
 ---
 
 ## Dashboard Preview
 
-![Patient Engagement Dashboard](screenshots/patient_engagement_dashboard.png)
+![Dashboard Preview](screenshots/dashboard_preview.png)
+
+### KPI Overview
+
+![KPI Overview](screenshots/kpi_overview.png)
+
+### Journey / Trend View
+
+![Trend or Funnel](screenshots/trend_or_funnel.png)
+
+### Segment / Risk View
+
+![Segment or Risk View](screenshots/segment_or_risk_view.png)
+
+---
+
+## SQL Transformations
+
+The repo includes recruiter-readable SQL queries that match the dashboard visuals.
+
+### 1. KPI Summary Query
+
+```sql
+SELECT
+    COUNT(DISTINCT patient_id) AS total_patients,
+    AVG(d1_retained) AS d1_retention,
+    AVG(d7_retained) AS d7_retention,
+    AVG(d30_retained) AS d30_retention,
+    AVG(treatment_completed) AS treatment_completion_rate,
+    AVG(outcome_success) AS outcome_success_rate,
+    AVG(engagement_score) / 10.0 AS engagement_rate
+FROM patient_engagement;
+```
+
+### 2. Patient Journey Funnel Query
+
+```sql
+SELECT
+    funnel_stage,
+    funnel_stage_order,
+    COUNT(DISTINCT patient_id) AS patients
+FROM patient_engagement
+GROUP BY funnel_stage, funnel_stage_order
+ORDER BY funnel_stage_order;
+```
+
+### 3. Retention Trend Query
+
+```sql
+SELECT
+    DATE_TRUNC('week', journey_date) AS week_of_date,
+    AVG(d1_retained) AS d1_retention,
+    AVG(d7_retained) AS d7_retention,
+    AVG(d30_retained) AS d30_retention
+FROM patient_engagement
+GROUP BY 1
+ORDER BY 1;
+```
+
+### 4. Cost by Condition Query
+
+```sql
+SELECT
+    condition,
+    AVG(treatment_cost) AS avg_treatment_cost,
+    AVG(treatment_completed) AS treatment_completion_rate,
+    AVG(outcome_success) AS outcome_success_rate
+FROM patient_engagement
+WHERE treatment_cost > 0
+GROUP BY condition
+ORDER BY avg_treatment_cost DESC;
+```
+
+---
+
+## Metrics Engineering
+
+| Metric | Formula |
+|---|---|
+| D1 Retention | D1 Retained Patients / Total Patients |
+| D7 Retention | D7 Retained Patients / Total Patients |
+| D30 Retention | D30 Retained Patients / Total Patients |
+| Engagement Rate | Average Engagement Score / 10 |
+| Treatment Completion Rate | Treatment Completed Patients / Total Patients |
+| Outcome Success Rate | Outcome Success Patients / Total Patients |
+| Drop-off Rate | 1 - Stage Conversion Rate |
+| Avg Treatment Cost | Total Treatment Cost / Completed Treatments |
 
 ---
 
 ## Product Insights
 
-1. **Patient drop-off is highest between consultation and treatment completion.**  
-   This suggests that patients may need support after the consultation stage to complete treatment.
+### Insight
+Patient drop-off is highest between consultation and treatment, while D30 retention remains much lower than early D1 retention. This suggests patients are entering the journey but not sustaining long-term engagement.
 
-2. **D30 retention is much lower than D1 retention.**  
-   Short-term engagement is stronger than long-term engagement, which means the care journey needs follow-up and reminder strategies.
+### Action
+Analyze barriers preventing patients from completing treatment and re-engaging after initial visits, especially across high-cost conditions and high-risk segments.
 
-3. **Cardiac Care and Diabetes drive the highest treatment cost.**  
-   These areas should receive close monitoring because they carry both financial and outcome impact.
+### Recommendation
+Implement targeted follow-ups, digital reminders, condition-specific outreach, and re-engagement campaigns for patients with low D30 retention signals.
 
-4. **Risk segmentation shows meaningful patient differences.**  
-   High-risk and medium-risk patients require different engagement and intervention strategies.
-
+### Decision
+Prioritize reducing treatment-stage drop-off and improving D30 retention before scaling patient acquisition efforts.
 ---
 
 ## Experimentation Thinking
 
-A practical experiment could test whether targeted follow-up reminders improve D30 retention and treatment completion.
+Potential healthcare experiments:
 
-**Experiment idea:**
-
-| Item | Description |
-|---|---|
-| Control Group | Standard patient follow-up process |
-| Variant Group | Personalized reminder and care navigation support |
-| Primary Metric | D30 retention |
-| Secondary Metric | Treatment completion rate |
-| Guardrail Metrics | Cost per completed treatment, patient satisfaction, follow-up completion |
-| Decision Rule | Ship if D30 retention and treatment completion improve without increasing cost per outcome |
-
----
-
-## Recommendations
-
-- Launch targeted follow-up reminders for patients after consultation.
-- Prioritize intervention for high-risk patients and low-engagement segments.
-- Monitor Cardiac Care and Diabetes because they represent high-cost condition groups.
-- Improve digital touchpoints between appointment booking and treatment completion.
-- Add operational alerts for patients who do not complete follow-up within the expected window.
+- Reminder notification timing
+- Telehealth vs in-person follow-up
+- High-risk patient intervention workflow
+- Personalized care messaging
+- Retention nudges for D30 patients
 
 ---
 
 ## Decision Framework
 
-| Decision Area | Recommendation |
-|---|---|
-| Patient Retention | Focus on improving D30 retention before scaling acquisition |
-| Care Journey | Reduce friction between consultation and treatment completion |
-| Cost Control | Monitor high-cost conditions with outcome-based interventions |
-| Product Strategy | Use digital reminders and patient journey analytics to improve engagement |
-| Operational Priority | Build care team workflows around high-risk patient segments |
+| Decision Signal | Rule | Action |
+|---|---|---|
+| Strong | High treatment completion + improving D30 retention | Scale engagement workflow |
+| Promising | Good D1/D7 retention but weak D30 retention | Monitor and improve follow-up |
+| Review | High cost + low completion | Investigate care barriers |
+| At Risk | High drop-off + low outcome success | Prioritize intervention |
 
 ---
 
-## Business Impact
+## Measurable Business Impact
 
-This dashboard supports:
+This dashboard could help healthcare leadership:
 
-- Better patient retention monitoring
-- Faster identification of care journey drop-off
-- More targeted patient outreach
-- Improved treatment completion tracking
-- Stronger alignment between healthcare outcomes and product analytics
-- Better executive-level decisions around digital health engagement
+- Improve D30 retention by **5–10%** through targeted follow-up programs.
+- Increase treatment completion by **4–8%** by identifying the highest drop-off stages.
+- Reduce avoidable patient journey drop-off by **6–12%** through funnel monitoring.
+- Lower cost exposure by focusing intervention on high-cost conditions such as cardiac care and diabetes.
+- Improve executive decision speed by consolidating retention, cost, risk, and engagement KPIs into one dashboard.
 
 ---
 
 ## Streamlit App
 
-A lightweight Streamlit app is included so the project can be viewed beyond Tableau.
+The Streamlit app recreates the Tableau dashboard with:
+
+- KPI cards
+- Patient journey funnel
+- Retention trend
+- Cost by condition
+- Drop-off analysis
+- Patient risk segmentation
+- Engagement distribution
+- Executive Decision Summary cards
 
 Run locally:
 
@@ -219,70 +220,45 @@ streamlit run app/streamlit_app.py
 
 ---
 
-## Repository Architecture
+## Repo Architecture
 
 ```text
-patient-engagement-outcomes-dashboard/
-│
-├── data/
-│   └── patient_engagement.csv
-│
-├── sql/
-│   ├── patient_journey_funnel.sql
-│   ├── retention_analysis.sql
-│   ├── cost_by_condition.sql
-│   ├── risk_segmentation.sql
-│   └── metrics_engineering.sql
-│
-├── notebooks/
-│   ├── eda.ipynb
-│   └── kpi_analysis.ipynb
-│
-├── dashboard/
-│   └── tableau_dashboard_placeholder.md
-│
-├── screenshots/
-│   └── patient_engagement_dashboard.png
-│
+Patient-Engagement-Outcomes-Dashboard/
 ├── app/
 │   └── streamlit_app.py
-│
+├── dashboard/
+│   └── tableau_dashboard_preview.png
+├── data/
+│   └── patient_engagement.csv
 ├── docs/
-│   ├── business_case.md
-│   ├── dashboard_guide.md
-│   ├── kpi_definitions.md
-│   └── experiment_plan.md
-│
-├── requirements.txt
+│   └── project_summary.md
+├── notebooks/
+│   ├── eda_cleaning_feature_engineering.ipynb
+│   └── EDA_CLEANING_FEATURE_ENGINEERING.md
+├── screenshots/
+│   ├── dashboard_preview.png
+│   ├── kpi_overview.png
+│   ├── trend_or_funnel.png
+│   └── segment_or_risk_view.png
+├── sql/
+│   └── patient_engagement_analysis.sql
 ├── .gitignore
-└── README.md
+├── README.md
+└── requirements.txt
 ```
 
 ---
 
 ## Automation Awareness
 
-This project can be extended with a simple analytics pipeline:
-
-1. Load patient engagement data
-2. Validate key fields
-3. Aggregate patient-level KPIs
-4. Refresh dashboard-ready tables
-5. Export results for Tableau or Streamlit
-
-Recommended future automation tools:
-
-- Python script for beginner-friendly automation
-- Scheduled SQL jobs for warehouse-based refreshes
-- Prefect for more advanced workflow orchestration
+Future production workflow could include scheduled SQL refreshes, Python validation scripts, automated Tableau extract refresh, and Streamlit deployment monitoring.
 
 ---
 
 ## Future Improvements
 
-- Add real-time patient engagement alerts
-- Add cohort retention heatmaps
-- Add A/B testing readout page
-- Add SHAP-based churn/risk model explanation
-- Add automated KPI refresh pipeline
-- Add Tableau packaged workbook when available
+- Add predictive modeling for patients at risk of low D30 retention.
+- Add cohort-level retention heatmaps by acquisition channel and device type.
+- Add statistical testing for engagement interventions.
+- Connect the workflow to Snowflake, Redshift, or BigQuery.
+- Add automated data-quality checks before dashboard refresh.
