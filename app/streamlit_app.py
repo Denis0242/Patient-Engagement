@@ -21,34 +21,32 @@ def load_data():
 
 df = load_data()
 
-BLUE = "#3f73ad"
-LIGHT_BLUE = "#dff0ff"
-MID_BLUE = "#8ec1e4"
-DARK_BLUE = "#27507d"
-
 st.markdown("""
 <style>
 .block-container {
-    padding-top: 1.4rem;
+    padding-top: 2.4rem;
     padding-bottom: 1rem;
 }
 
 .main-title {
-    text-align:center;
-    color:#2f66a3;
-    font-size:34px;
-    font-weight:800;
-    margin-top:10px;
-    margin-bottom:2px;
-    line-height:1.2;
+    text-align: center;
+    color: #1f5fa8;
+    font-size: 44px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    line-height: 1.2;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.16);
 }
 
 .subtitle {
-    text-align:center;
-    color:#5d6d7e;
-    font-size:15px;
-    margin-top:0;
-    margin-bottom:20px;
+    text-align: center;
+    color: #4f6175;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 26px;
 }
 
 .kpi-card {
@@ -100,11 +98,20 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown(
-    '<div class="main-title">Patient Engagement & Outcomes Dashboard</div>',
+    """
+    <div class="main-title">
+        Patient Engagement & Outcomes Dashboard
+    </div>
+    """,
     unsafe_allow_html=True
 )
+
 st.markdown(
-    '<div class="subtitle">Healthcare Product Analytics | Funnel, Retention, Cost, Risk & Treatment Completion</div>',
+    """
+    <div class="subtitle">
+        Healthcare Product Analytics | Funnel, Retention, Cost, Risk & Treatment Completion
+    </div>
+    """,
     unsafe_allow_html=True
 )
 
